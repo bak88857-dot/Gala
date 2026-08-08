@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive App UI</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            color: #333;
+            padding-bottom: 70px;
+        }
+        /* Top Navigation */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background: #fff;
+        }
+        .header .nav-tabs {
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .header .nav-tabs span {
+            margin-right: 15px;
+            color: #888;
+            cursor: pointer;
+        }
+        .header .nav-tabs span.active {
+            color: #000;
+            border-bottom: 2px solid #6c5ce7;
+            padding-bottom: 3px;
+        }
+        .header .icons span {
+            font-size: 20px;
+            margin-left: 15px;
+            cursor: pointer;
+        }
+
+        /* Categories Section */
+        .categories {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px;
+        }
+        .cat-card {
+            width: 31%;
+            padding: 15px 10px;
+            border-radius: 12px;
+            text-align: center;
+            color: #fff;
+            font-weight: bold;
+            font-size: 14px;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+        .cat-card:active { transform: scale(0.95); }
+        .cat-1 { background: linear-gradient(135deg, #a29bfe, #74b9ff); }
+        .cat-2 { background: linear-gradient(135deg, #ffeaa7, #fab1a0); }
+        .cat-3 { background: linear-gradient(135deg, #55efc4, #00cec9); }
+
+        /* Room Grid Section (Name removed, Mic & Settings added) */
+        .room-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            padding: 0 15px;
+        }
+        .room-card {
+            width: 48%;
+            background: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            position: relative;
+            cursor: pointer;
+        }
+        .room-img {
+            height: 140px;
+            background-color: #ddd;
+            background-size: cover;
+            background-position: center;
+        }
+        /* Action Overlay inside cards */
+        .room-actions {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 12px;
+            background: #fff;
+            align-items: center;
+        }
+        .mic-btn, .setting-btn {
+            background: #f1f2f6;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .mic-btn { color: #e84118; }
+        .setting-btn { color: #2f3640; }
+        .mic-btn:active, .setting-btn:active { background: #dfe4ea; }
+
+        /* Floating Action Button */
+        .fab {
+            position: fixed;
+            bottom: 75px;
+            right: 20px;
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            font-size: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            cursor: pointer;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: #fff;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            box-shadow: 0 -2px 5px rgba(0,0,0,0.05);
+            z-index: 100;
+        }
+        .nav-item {
+            text-align: center;
+            font-size: 12px;
+            color: #666;
+            cursor: pointer;
+            background: none;
+            border: none;
+        }
+        .nav-item.active { color: #6c5ce7; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <div class="header">
+        <div class="nav-tabs">
+            <span class="active" onclick="switchTab(this, 'Popular')">Popular</span>
+            <span onclick="switchTab(this, 'My')">My</span>
+        </div>
+        <div class="icons">
+            <span onclick="alert('Search clicked!')">🔍</span>
+            <span onclick="alert('Add clicked!')">➕</span>
+        </div>
+    </div>
+
+    <!-- Categories -->
+    <div class="categories">
+        <div class="cat-card cat-1" onclick="catClick('Contribution')">Contribution</div>
+        <div class="cat-card cat-2" onclick="catClick('Charm')">Charm</div>
+        <div class="cat-card cat-3" onclick="catClick('Room')">Room</div>
+    </div>
+
+    <!-- Room Grid (No Room Names, Added Functional Mic & Settings) -->
+    <div class="room-grid">
+        <div class="room-card">
+            <div class="room-img" style="background-color: #ff7675;" onclick="openRoom(1)"></div>
+            <div class="room-actions">
+                <button class="mic-btn" onclick="toggleMic(event, 1)">🎙️ Mic On</button>
+                <button class="setting-btn" onclick="openSettings(event, 1)">⚙️ Settings</button>
+            </div>
+        </div>
+        <div class="room-card">
+            <div class="room-img" style="background-color: #74b9ff;" onclick="openRoom(2)"></div>
+            <div class="room-actions">
+                <button class="mic-btn" onclick="toggleMic(event, 2)">🎙️ Mic On</button>
+                <button class="setting-btn" onclick="openSettings(event, 2)">⚙️ Settings</button>
+            </div>
+        </div>
+        <div class="room-card">
+            <div class="room-img" style="background-color: #55efc4;" onclick="openRoom(3)"></div>
+            <div class="room-actions">
+                <button class="mic-btn" onclick="toggleMic(event, 3)">🎙️ Mic On</button>
+                <button class="setting-btn" onclick="openSettings(event, 3)">⚙️ Settings</button>
+            </div>
+        </div>
+        <div class="room-card">
+            <div class="room-img" style="background-color: #ffeaa7;" onclick="openRoom(4)"></div>
+            <div class="room-actions">
+                <button class="mic-btn" onclick="toggleMic(event, 4)">🎙️ Mic On</button>
+                <button class="setting-btn" onclick="openSettings(event, 4)">⚙️ Settings</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Button -->
+    <button class="fab" onclick="alert('Create/Edit action triggered!')">✏️</button>
+
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+        <button class="nav-item active" onclick="bottomNav(this, 'Home')">🏠<br>Home</button>
+        <button class="nav-item" onclick="bottomNav(this, 'Star')">⭐<br>Star</button>
+        <button class="nav-item" onclick="bottomNav(this, 'Notification')">🔔<br>Notification</button>
+        <button class="nav-item" onclick="bottomNav(this, 'Profile')">👤<br>Profile</button>
+    </div>
+
+    <script>
+        // Tab switching logic
+        function switchTab(element, tabName) {
+            document.querySelectorAll('.nav-tabs span').forEach(el => el.classList.remove('active'));
+            element.classList.add('active');
+            console.log(tabName + ' tab selected');
+        }
+
+        // Category click action
+        function catClick(category) {
+            alert(category + ' category opened!');
+        }
+
+        // Room click action
+        function openRoom(roomId) {
+            alert('Opening Room ID: ' + roomId);
+        }
+
+        // Functional Mic Toggle
+        function toggleMic(event, roomId) {
+            event.stopPropagation(); // Prevents opening the room when clicking the button
+            const btn = event.target;
+            if (btn.innerText.includes('On')) {
+                btn.innerText = '🔇 Mic Off';
+                btn.style.color = '#b2bec3';
+                alert('Room ' + roomId + ': Microphone Muted');
+            } else {
+                btn.innerText = '🎙️ Mic On';
+                btn.style.color = '#e84118';
+                alert('Room ' + roomId + ': Microphone Unmuted');
+            }
+        }
+
+        // Functional Settings Action
+        function openSettings(event, roomId) {
+            event.stopPropagation(); // Prevents opening the room when clicking the button
+            alert('Opening Settings for Room ' + roomId);
+        }
+
+        // Bottom Navigation logic
+        function bottomNav(element, pageName) {
+            document.querySelectorAll('.bottom-nav button').forEach(el => el.classList.remove('active'));
+            element.classList.add('active');
+            console.log('Navigated to: ' + pageName);
+        }
+    </script>
+</body>
+</html>
